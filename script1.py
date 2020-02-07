@@ -11,11 +11,6 @@ import json
 import pprint
 import time
 import operator
-import webbrowser
-try:
-    from SimpleHTTPServer import test, SimpleHTTPRequestHandler
-except ImportError:
-    from http.server import test, SimpleHTTPRequestHandler
 
 start=time.time()
 
@@ -75,11 +70,7 @@ def Main():
 	save_results(result, "output/output_full.json")
 	end=time.time()
 	print("Elapsed time: ", end-start)
-
-	print("The cluster has been opened in the browser for visualization. Press CRTL+C to exit the program")
-
-	webbrowser.open('http://localhost:8000/')
-	test(SimpleHTTPRequestHandler)
+	
 
 def get_intersected(symbol, dict, depth=1):
 	return [{'root_symbol':symbol, 'cor_symbol':headers[i].strip(), 'score':score, 'depth':depth} for i, score in enumerate(dict[symbol]) if score > SCORE and headers[i].strip()!=symbol]
