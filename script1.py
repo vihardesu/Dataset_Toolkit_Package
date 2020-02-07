@@ -26,6 +26,7 @@ if len(sys.argv) != 3:
 
 root_symbol = sys.argv[1]
 file_name = sys.argv[2]
+nodes=50
 
 #Read the dataset
 headers = []
@@ -51,15 +52,13 @@ with open(file_name) as file:
 
 def Main():
 	try:
-		result=sorted(get_intersected(root_symbol, data), key=operator.itemgetter('score'), reverse=True)
+		result=sorted(set_nodes(get_intersected(root_symbol, data), nodes=nodes), key=operator.itemgetter('depth', 'root_symbol')) 
 	except:
 		print('*****')
 		print("ERROR: The dataset is of an invalid format or the symbol was not found")
 		print('*****')
 		exit()
 
-	result=sorted(sorted(result, key=operator.itemgetter('score'), 
-		reverse=True), key=operator.itemgetter('depth', 'root_symbol')) 	
 	array=list(map(operator.itemgetter('root_symbol', 'cor_symbol'), result))
 
 
@@ -70,10 +69,14 @@ def Main():
 	save_results(result, "output/output_full.json")
 	end=time.time()
 	print("Elapsed time: ", end-start)
-	
+
 
 def get_intersected(symbol, dict, depth=1):
 	return [{'root_symbol':symbol, 'cor_symbol':headers[i].strip(), 'score':score, 'depth':depth} for i, score in enumerate(dict[symbol]) if score > SCORE and headers[i].strip()!=symbol]
+
+def set_nodes(result, nodes):
+	return sorted(sorted(result, key=operator.itemgetter('score'), reverse=True), 
+		key=operator.itemgetter('depth'))[:nodes]
 
 def save_results(list, name):
 	with open(name, 'w') as outfile:

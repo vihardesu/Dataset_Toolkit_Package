@@ -36,6 +36,8 @@ sys.argv = [sys.argv[0]]
 
 if min_score<=0:
 	min_score=0.0001
+if nodes>50:
+	nodes=50
 
 #Read the dataset
 headers = []
