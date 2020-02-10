@@ -17,16 +17,18 @@ start=time.time()
 
 SCORE = 0.0001
 
-if len(sys.argv) != 3:
+if len(sys.argv) != 4:
 	print('*****')
-	print('Usage: print script.py <symbol> <file_name>')
-	print('Example: python script1.py CELG dataset.tsv')
+	print('Usage: python script.py <symbol> <transponse_flag> <file_name>')
+	print('Example: python script1.py CELG 1 dataset.tsv')
 	print('*****')
 	exit()
 
 root_symbol = sys.argv[1]
-file_name = sys.argv[2]
+transponse_flag = int(sys.argv[2])
+file_name = sys.argv[3]
 nodes=50
+
 
 #Read the dataset
 headers = []
@@ -45,10 +47,14 @@ else:
 
 with open(file_name) as file:
 	csv_reader = csv.reader(file, delimiter=delim)
+	if transponse_flag==1:
+		csv_reader=zip(*csv_reader)
 	headers = next(csv_reader)[1:]
 	for row in csv_reader:
-		row[0]=row[0].rstrip()
-		data[row[0]] = [float(x) for x in row[1:]]
+		temp=row[0].rstrip()
+		data[temp] = [float(x) for x in row[1:]]
+
+
 
 def Main():
 	try:
@@ -72,7 +78,7 @@ def Main():
 
 
 def get_intersected(symbol, dict, depth=1):
-	return [{'root_symbol':symbol, 'cor_symbol':headers[i].strip(), 'score':score, 'depth':depth} for i, score in enumerate(dict[symbol]) if score > SCORE and headers[i].strip()!=symbol]
+	return [{'root_symbol':symbol, 'cor_symbol':headers[i].strip(), 'score':score, 'depth':depth} for i, score in enumerate(dict[symbol]) if score > SCORE and headers[i].strip]
 
 def set_nodes(result, nodes):
 	return sorted(sorted(result, key=operator.itemgetter('score'), reverse=True), 

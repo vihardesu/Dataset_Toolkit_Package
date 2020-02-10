@@ -15,9 +15,9 @@ import operator
 start=time.time()
 
 
-if len(sys.argv) != 7:
+if len(sys.argv) != 8:
 	print('*****')
-	print('Usage: print script.py <symbol> <depth> <branches> <nodes> <min_score><file_name>')
+	print('Usage: print script.py <symbol> <depth> <branches> <nodes> <min_score> <transponse_flag> <file_name>')
 	print('Example: python script2.py CELG 3 2 5 0.01 dataset.tsv')
 	print('Note: passing the argument for branches and nodes as 0 gives the max possible amount of nodes and branches')
 	print('Passing all numerical arguments as 0 makes the script behave the same as script1.py')
@@ -30,7 +30,8 @@ max_depth = int(sys.argv[2])
 branches = int(sys.argv[3])
 nodes = int(sys.argv[4])
 min_score = float(sys.argv[5])
-file_name = sys.argv[6]
+transponse_flag = int(sys.argv[6])
+file_name = sys.argv[7]
 
 sys.argv = [sys.argv[0]]
 
@@ -56,10 +57,13 @@ else:
 
 with open(file_name) as file:
 	csv_reader = csv.reader(file, delimiter=delim)
+	if transponse_flag==1:
+		csv_reader=zip(*csv_reader)
 	headers = next(csv_reader)[1:]
 	for row in csv_reader:
-		row[0]=row[0].rstrip()
-		data[row[0]] = [float(x) for x in row[1:]]
+		temp=row[0].rstrip()
+		data[temp] = [float(x) for x in row[1:]]
+
 
 def Main():
 
