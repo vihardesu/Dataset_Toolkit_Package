@@ -17,7 +17,7 @@ start=time.time()
 
 if len(sys.argv) != 8:
 	print('*****')
-	print('Usage: print script.py <symbol> <depth> <branches> <nodes> <min_score> <transponse_flag> <file_name>')
+	print('Usage: python script.py <symbol> <depth> <branches> <nodes> <min_score> <transponse_flag> <file_name>')
 	print('Example: python script2.py CELG 3 2 5 0.01 dataset.tsv')
 	print('Note: passing the argument for branches and nodes as 0 gives the max possible amount of nodes and branches')
 	print('*****')
@@ -159,8 +159,6 @@ def set_depth(result, root_symbol, max_depth, branches):
 	#this is used for the while loop(subtracted by 1 because first level has already been covered above)
 	remainer_depth=max_depth-1
 	while remainer_depth>0 and len(result)<nodes:
-		print(count)
-
 		if count%2==1:
 			data=n_data.copy()
 			headers=n_headers[:]
@@ -174,7 +172,7 @@ def set_depth(result, root_symbol, max_depth, branches):
 			#checking if the symbol in question has already been covered or not
 			if(result[j]['cor_symbol'] not in covered_symbols and result[j]['cor_symbol'] not in symbols):
 				symbols.append(result[j]['cor_symbol'])
-		print("Symbols: ", symbols)
+		#print("Symbols: ", symbols)
 		
 		temp[:]=[]
 		try:
