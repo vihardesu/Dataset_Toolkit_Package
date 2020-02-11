@@ -48,14 +48,18 @@ else:
 with open(file_name) as file:
 	csv_reader = csv.reader(file, delimiter=delim)
 	if transponse_flag==1:
-		csv_reader=zip(*csv_reader)
+		if sys.version_info[0] < 3:
+			from itertools import izip
+			csv_reader=izip(*csv_reader)
+		else:
+			csv_reader=(zip(*csv_reader))
 	headers = next(csv_reader)[1:]
 	for row in csv_reader:
 		temp=row[0].rstrip()
 		data[temp] = [float(x) for x in row[1:]]
 
 
-
+	
 def Main():
 	try:
 		result=sorted(set_nodes(get_intersected(root_symbol, data), nodes=nodes), key=operator.itemgetter('depth', 'root_symbol')) 
@@ -76,13 +80,26 @@ def Main():
 	end=time.time()
 	print("Elapsed time: ", end-start)
 
-
 def get_intersected(symbol, dict, depth=1):
-	return [{'root_symbol':symbol, 'cor_symbol':headers[i].strip(), 'score':score, 'depth':depth} for i, score in enumerate(dict[symbol]) if score > SCORE and headers[i].strip]
+	stmnt=[]
+	for i, score in enumerate(dict[symbol]):
+		print(i, score)
+		print(len(headers))
+		print(len(data))
+		if score > SCORE and headers[i].strip:
+			stmnt.append({'root_symbol':symbol, 'cor_symbol':headers[i].strip(), 'score':score, 'depth':depth})
+	return stmnt
 
 def set_nodes(result, nodes):
 	return sorted(sorted(result, key=operator.itemgetter('score'), reverse=True), 
 		key=operator.itemgetter('depth'))[:nodes]
+
+def zipper(csv):
+	if sys.version_info[0] < 3:
+		from itertools import izip
+		return izip(*csv)
+	else:
+		return zip(*csv)
 
 def save_results(list, name):
 	with open(name, 'w') as outfile:

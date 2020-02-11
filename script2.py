@@ -20,7 +20,6 @@ if len(sys.argv) != 8:
 	print('Usage: print script.py <symbol> <depth> <branches> <nodes> <min_score> <transponse_flag> <file_name>')
 	print('Example: python script2.py CELG 3 2 5 0.01 dataset.tsv')
 	print('Note: passing the argument for branches and nodes as 0 gives the max possible amount of nodes and branches')
-	print('Passing all numerical arguments as 0 makes the script behave the same as script1.py')
 	print('*****')
 	exit()
 
@@ -37,12 +36,16 @@ sys.argv = [sys.argv[0]]
 
 if min_score<=0:
 	min_score=0.0001
-if nodes>50:
-	nodes=50
+if nodes>100:
+	nodes=100
 
 #Read the dataset
 headers = []
 data = {}
+n_headers = []
+n_data = {}
+t_headers = []
+t_data = {}
 delim= None
 if file_name[-4:]=='.csv':
 	delim=','
@@ -58,17 +61,41 @@ else:
 with open(file_name) as file:
 	csv_reader = csv.reader(file, delimiter=delim)
 	if transponse_flag==1:
-		csv_reader=zip(*csv_reader)
+		if sys.version_info[0] < 3:
+			from itertools import izip
+			csv_reader=izip(*csv_reader)
+		else:
+			csv_reader=zip(*csv_reader)
+
 	headers = next(csv_reader)[1:]
+	n_headers = headers[:]
 	for row in csv_reader:
 		temp=row[0].rstrip()
 		data[temp] = [float(x) for x in row[1:]]
+	n_data = data.copy()
+try:
+	data[header[0]]
+	t_headers=n_headers
+	t_data=n_data
+except:
+	with open(file_name) as file:
+		t_csv=csv.reader(file, delimiter=delim)
+		if transponse_flag==0:
+			if sys.version_info[0] < 3:
+				from itertools import izip
+				t_csv=izip(*t_csv)
+			else:
+				t_csv=zip(*t_csv)
 
+		t_headers = next(t_csv)[1:]
+		for row in t_csv:
+			temp=row[0].rstrip()
+			t_data[temp] = [float(x) for x in row[1:]]
 
 def Main():
 
 	try:
-		result=sorted(get_intersected(root_symbol, data), key=operator.itemgetter('score'), reverse=True)
+		result=sorted(get_intersected(root_symbol, headers, data), key=operator.itemgetter('score'), reverse=True)
 
 	except:
 		print('*****')
@@ -93,12 +120,12 @@ def Main():
 
 	try:
 		if result[-1]['depth']<max_depth:
-			print("Computed depth is less than specified. Try a higher node or branch count")
+			print("NOTE: Computed depth is less than specified")
 	except IndexError:
 		print("Graph is empty! Try a lower threshold")
 		exit()
 	if len(result)<nodes:
-		print("Computed amount of nodes are less than specified. Try a higher depth or branch count")
+		print("NOTE: Computed amount of nodes are less than specified.")
 	print("Nodes: ", len(result))
 	if max_depth>0:
 		print("Max Depth: ", result[-1]['depth'])
@@ -115,9 +142,10 @@ def Main():
 """------------------------------------------------------------------------------------------------"""
 
 #this function gets all the correlated symbols of the root symbol
-def get_intersected(symbol, dict, depth=1):
-	return [{'root_symbol':symbol, 'cor_symbol':headers[i].strip(), 'score':score, 'depth':depth} for i, 
+def get_intersected(symbol, headers, dict, depth=1):
+	return [{'root_symbol':symbol, 'cor_symbol':headers[i].strip(), 'score':score, 'depth':depth} for i,
 	score in enumerate(dict[symbol]) if score > min_score and headers[i].strip()!=symbol]
+
 
 
 def set_depth(result, root_symbol, max_depth, branches):
@@ -125,35 +153,52 @@ def set_depth(result, root_symbol, max_depth, branches):
 	symbols=[]
 	covered_symbols=[]
 	temp=[]
+	count=0
 	covered_symbols.append(root_symbol)
+
 	#this is used for the while loop(subtracted by 1 because first level has already been covered above)
 	remainer_depth=max_depth-1
-	while remainer_depth>0:
-		temp[:]=[]
+	while remainer_depth>0 and len(result)<nodes:
+		print(count)
+
+		if count%2==1:
+			data=n_data.copy()
+			headers=n_headers[:]
+		else:
+			data=t_data.copy()
+			headers=t_headers[:]
+
 		#removes all symbols previously covered
 		symbols=[x for x in symbols if x not in covered_symbols]
 		for j in range(len(result)):
 			#checking if the symbol in question has already been covered or not
 			if(result[j]['cor_symbol'] not in covered_symbols and result[j]['cor_symbol'] not in symbols):
 				symbols.append(result[j]['cor_symbol'])
+		print("Symbols: ", symbols)
+		
+		temp[:]=[]
 		try:
 			for name in symbols:
 				#performs the same function as with the root symbol
-				temp[(len(temp)):]=get_intersected(name, data, max_depth-remainer_depth+1)
+				temp[(len(temp)):]=get_intersected(name, headers, data, max_depth-remainer_depth+1)
 		except:
 			pass
 		remainer_depth-=1
-		#updates symbols already covered
+
 
 		temp=sorted(sorted(temp, key=operator.itemgetter('score'), reverse=True), 
 			key=operator.itemgetter('depth'))
 
+		#updates symbols already covered
 		covered_symbols.extend(symbols)
 		temp=remove_duplicates(temp)
 		if branches>0:
 			temp=set_branches(temp, branches, covered_symbols)
 
 		result.extend(temp)
+
+
+		count+=1
 
 	return result
 
