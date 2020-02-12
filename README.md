@@ -1,7 +1,6 @@
 # dataset-toolkit
 [Vectorspace AI](https://vectorspace.ai/)<br/>
 This repo intends to generate and visualize clusters from provided datasets.<br/>
-Highcharts is used to visualize the culsters/graphs
 <br/>
 <br/>
 The scripts automatically detect if the file is .csv or .tsv(aslong as the file has the extension) and uses the appropiorate delimiter<br/>
@@ -30,4 +29,5 @@ Example: python extract_graph.py AGIO_sym 3 4 50 0.01 0 datasets/pharma_pharma.c
 Note: passing the argument for branches and nodes as 0 gives the max possible amount of nodes and branches<br/>
 <br/>
 <br/>
-![Example of a Graph](https://raw.githubusercontent.com/vectorspace-ai/dataset-toolkit/master/graph_image_example.png)
+![Example of a Graph](https://raw.githubusercontent.com/vectorspace-ai/dataset-toolkit/master/graph_image_example.png)<br/>
+[Highcharts](https://www.highcharts.com/) is used to visualize the culsters/graphs
