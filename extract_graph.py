@@ -280,20 +280,20 @@ def write_labels(filename):
 	with open(filename) as file:
 		delim=check_filetype(sys.argv[1])
 
-		index_csv = csv.reader(file, delimiter=delim)
-		column_csv=None
-
-		rows = next(index_csv)[1:]
-		filename=filename.split('/', 1)[-1]
-		filename=filename[:-4]
-		with open("row_labels_"+filename+".txt", 'w') as index_file:
-			index_file.writelines("%s\n" % row for row in rows)
-
-		column_csv=zipper(index_csv)
+		column_csv = csv.reader(file, delimiter=delim)
+		index_csv=None
 
 		columns = next(column_csv)[1:]
-		with open("column_labels_"+filename+".txt", 'w') as column_file:
+		filename=filename.split('/', 1)[-1]
+		filename=filename[:-4]
+		with open("labels/column_labels_"+filename+".txt", 'w') as column_file:
 			column_file.writelines("%s\n" % column for column in columns)
+
+		index_csv=zipper(column_csv)
+
+		rows = next(index_csv)[1:]
+		with open("labels/row_labels_"+filename+".txt", 'w') as index_file:
+			index_file.writelines("%s\n" % row for row in rows)
 		print('*****')
 		print('Labels saved to "row_labels_'+filename+'.txt" and "column_labels'+filename+'.txt" in the folder "labels"')
 		print('*****')
