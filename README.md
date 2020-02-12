@@ -1,6 +1,6 @@
 # dataset-toolkit
 <br/>
-[Vectorspace AI](https://vectorspace.ai/)
+[Vectorspace AI](https://vectorspace.ai/  "Vectorspace AI")
 This repo intends to generate and visualize clusters from provided datasets.<br/>
 <br/>
 <br/>
