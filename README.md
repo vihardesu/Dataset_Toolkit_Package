@@ -1,7 +1,7 @@
 # dataset-toolkit
 <br/>
-[Vectorspace AI](https://vectorspace.ai/  "Vectorspace AI")
 This repo intends to generate and visualize clusters from provided datasets.<br/>
+[Vectorspace AI](https://vectorspace.ai/)<br/>
 <br/>
 <br/>
 The scripts automatically detect if the file is .csv or .tsv(aslong as the file has the extension) and uses the appropiorate delimiter<br/>
