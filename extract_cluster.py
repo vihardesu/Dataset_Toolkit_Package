@@ -74,15 +74,15 @@ def read_csv():
 
 
 	elif len(sys.argv)==2:
-		#try:
-		write_labels(sys.argv[1])
-		"""except:
+		try:
+			write_labels(sys.argv[1])
+		except:
 			print('*****')
 			print('Usage: python extract_cluster.py <symbol> <transponse_flag> <file_name>')
 			print('Example: python extract_cluster.py AGIO_sym 0 dataset/pharma_pharma_dataset.csv')
 			print('Run with only the dataset as argument to generate a list of the labels')
 			print('*****')
-			exit()"""
+			exit()
 	root_symbol = sys.argv[1]
 	transponse_flag = int(sys.argv[2])
 	file_name = sys.argv[3]
