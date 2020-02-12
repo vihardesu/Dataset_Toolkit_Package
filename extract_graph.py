@@ -284,6 +284,7 @@ def write_labels(filename):
 		column_csv=None
 
 		rows = next(index_csv)[1:]
+		filename=filename.split('/', 1)[-1]
 		filename=filename[:-4]
 		with open("row_labels_"+filename+".txt", 'w') as index_file:
 			index_file.writelines("%s\n" % row for row in rows)

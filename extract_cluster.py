@@ -20,7 +20,7 @@ nodes=50
 def Main():
 
 	data, headers, root_symbol = read_csv()
-	
+
 	try:
 		result=sorted(set_nodes(get_intersected(root_symbol, headers, data), nodes=nodes), key=operator.itemgetter('depth', 'root_symbol')) 
 	except:
@@ -74,15 +74,15 @@ def read_csv():
 
 
 	elif len(sys.argv)==2:
-		try:
-			write_labels(sys.argv[1])
-		except:
+		#try:
+		write_labels(sys.argv[1])
+		"""except:
 			print('*****')
 			print('Usage: python extract_cluster.py <symbol> <transponse_flag> <file_name>')
 			print('Example: python extract_cluster.py AGIO_sym 0 dataset/pharma_pharma_dataset.csv')
 			print('Run with only the dataset as argument to generate a list of the labels')
 			print('*****')
-			exit()
+			exit()"""
 	root_symbol = sys.argv[1]
 	transponse_flag = int(sys.argv[2])
 	file_name = sys.argv[3]
@@ -132,6 +132,7 @@ def write_labels(filename):
 		column_csv=None
 
 		rows = next(index_csv)[1:]
+		filename=filename.split('/', 1)[-1]
 		filename=filename[:-4]
 		with open("labels/row_labels_"+filename+".txt", 'w') as index_file:
 			index_file.writelines("%s\n" % row for row in rows)
@@ -142,7 +143,7 @@ def write_labels(filename):
 		with open("labels/column_labels_"+filename+".txt", 'w') as column_file:
 			column_file.writelines("%s\n" % column for column in columns)
 		print('*****')
-		print('Labels saved to "row_labels_'+filename+'.txt" and "column_labels'+filename+'.txt" in the folder "labels"')
+		print('Labels saved to "row_labels_'+filename+'.txt" and "column_labels_'+filename+'.txt" in the folder "labels"')
 		print('*****')
 		os._exit(1)
 
