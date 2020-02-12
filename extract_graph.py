@@ -278,7 +278,7 @@ def zipper(csv):
 
 def write_labels(filename):
 	with open(filename) as file:
-		delim=check_filetype(sys.argv[1])
+		delim=check_filetype(filename)
 
 		column_csv = csv.reader(file, delimiter=delim)
 		index_csv=None
