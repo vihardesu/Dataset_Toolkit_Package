@@ -295,7 +295,7 @@ def write_labels(filename):
 		with open("labels/row_labels_"+filename+".txt", 'w') as index_file:
 			index_file.writelines("%s\n" % row for row in rows)
 		print('*****')
-		print('Labels saved to "row_labels_'+filename+'.txt" and "column_labels'+filename+'.txt" in the folder "labels"')
+		print('Labels saved to "row_labels_'+filename+'.txt" and "column_labels_'+filename+'.txt" in the folder "labels"')
 		print('*****')
 		os._exit(1)
 
