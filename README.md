@@ -1,6 +1,7 @@
 # dataset-toolkit
 [Vectorspace AI](https://vectorspace.ai/)<br/>
 This repo intends to generate and visualize clusters from provided datasets.<br/>
+Highcharts is used to visualize the culsters/graphs
 <br/>
 <br/>
 The scripts automatically detect if the file is .csv or .tsv(aslong as the file has the extension) and uses the appropiorate delimiter<br/>
