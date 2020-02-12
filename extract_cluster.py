@@ -20,12 +20,7 @@ nodes=50
 def Main():
 
 	data, headers, root_symbol = read_csv()
-	print(headers[0])
-
-	for i, score in enumerate(data[root_symbol]):
-		print(i, score)
-	print(root_symbol)
-
+	
 	try:
 		result=sorted(set_nodes(get_intersected(root_symbol, headers, data), nodes=nodes), key=operator.itemgetter('depth', 'root_symbol')) 
 	except:
