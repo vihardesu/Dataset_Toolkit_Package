@@ -28,3 +28,6 @@ Usage: python extract_graph.py [ symbol ] [ depth ] [ branches ] [ nodes ] [ min
 Example: python extract_graph.py AGIO_sym 3 4 50 0.01 0 datasets/pharma_pharma.csv<br/>
 "transponse_flag" transponses the dataset so that the user can search for a column label instead. Default is row label<br/>
 Note: passing the argument for branches and nodes as 0 gives the max possible amount of nodes and branches<br/>
+<br/>
+<br/>
+![Example of a Graph](https://raw.githubusercontent.com/vectorspace-ai/dataset-toolkit/master/graph_image_example.png)
