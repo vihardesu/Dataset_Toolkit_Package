@@ -32,8 +32,12 @@ def Main():
 
 	array=list(map(operator.itemgetter('root_symbol', 'cor_symbol'), result))
 
+	if len(result)>0:
+		pprint.pprint(result)
+	else:
+		print("Graph is empty! Selected symbol: "+args[0]+" does not have any relationships!")
+		exit()
 
-	pprint.pprint(result)
 	print("Nodes: ", len(result))
 
 	save_results(array, "output/cluster/", "cluster_output.json")

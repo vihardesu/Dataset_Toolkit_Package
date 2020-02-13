@@ -35,7 +35,7 @@ def Main():
 		print("ERROR: Dataset is of an invalid format or the symbol was not found")
 		print('*****')
 		exit()
-		
+
 	result=remove_duplicates(result)
 	if branches>0:
 			result=result[:branches]
@@ -51,13 +51,13 @@ def Main():
 
 	if len(result)>0:
 		pprint.pprint(result)
-
-	try:
-		if result[-1]['depth']<max_depth:
-			print("NOTE: Computed depth is less than specified")
-	except IndexError:
+	else:
 		print("Graph is empty! Try a lower threshold")
 		exit()
+
+
+	if result[-1]['depth']<max_depth:
+		print("NOTE: Computed depth is less than specified")
 	if len(result)<nodes:
 		print("NOTE: Computed amount of nodes are less than specified.")
 	print("Nodes: ", len(result))
