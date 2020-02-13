@@ -8,34 +8,40 @@ correlation matrices.
 import os
 import sys
 import csv
+import time
 import json
 import pprint
-import time
 import operator
 
 start=time.time()
 
 
 def Main():
-	data, n_data, t_data, headers, n_headers, t_headers, root_symbol, max_depth, branches, nodes, min_score=read_csv()
+
+	args=[]
+	args=read_csv()
+
+	min_score=args[3]
+	max_depth=args[4]
+	branches=args[5]
+	nodes=args[6]
+
 
 	try:
-		result=sorted(get_intersected(root_symbol, headers, data, min_score), key=operator.itemgetter('score'), reverse=True)
+		result=sorted(get_intersected(*args[:4]), key=operator.itemgetter('score'), reverse=True)
 
 	except:
 		print('*****')
 		print("ERROR: Dataset is of an invalid format or the symbol was not found")
 		print('*****')
 		exit()
+		
 	result=remove_duplicates(result)
 	if branches>0:
 			result=result[:branches]
 
-	kwargs= {"result": result, "root_symbol": root_symbol, "max_depth": max_depth,
-	"branches": branches,"nodes": nodes, "min_score": min_score, "data": data, "n_data": n_data, "t_data": t_data, "headers": headers,
-	"n_headers": n_headers, "t_headers": t_headers}
 
-	result = set_depth(**kwargs)
+	result = set_depth(result, *args)
 	if nodes>0:
 		result = set_nodes(result, nodes)
 
@@ -76,7 +82,7 @@ def get_intersected(symbol, headers, dict, min_score, depth=1):
 
 
 
-def set_depth(result, root_symbol, max_depth, branches, nodes, min_score, data, n_data, t_data, headers, n_headers, t_headers):
+def set_depth(result, root_symbol, headers, data, min_score, max_depth, branches, nodes, n_headers, n_data, t_headers, t_data):
 	#initialize 2 lists containing symbols
 	symbols=[]
 	covered_symbols=[]
@@ -254,7 +260,7 @@ def read_csv():
 			for row in t_csv:
 				temp=row[0].rstrip()
 				t_data[temp] = [float(x) for x in row[1:]]
-	return data, n_data, t_data, headers, n_headers, t_headers, root_symbol, max_depth, branches, nodes, min_score
+	return root_symbol, headers, data, min_score, max_depth, branches, nodes, n_headers, n_data, t_headers, t_data
 
 def check_filetype(filename):
 	delim= None

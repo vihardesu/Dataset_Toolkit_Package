@@ -13,16 +13,17 @@ import pprint
 import operator
 
 start=time.time()
-SCORE = 0.0001
-nodes=50
+
 
 
 def Main():
-
-	data, headers, root_symbol = read_csv()
+	nodes=50
+	SCORE=0.0001
+	
+	args = read_csv()
 
 	try:
-		result=sorted(set_nodes(get_intersected(root_symbol, headers, data), nodes=nodes), key=operator.itemgetter('depth', 'root_symbol')) 
+		result=sorted(set_nodes(get_intersected(SCORE, *args), nodes=nodes), key=operator.itemgetter('depth', 'root_symbol')) 
 	except:
 		print('*****')
 		print("ERROR: The dataset is of an invalid format or the symbol was not found")
@@ -44,7 +45,7 @@ def Main():
 
 
 
-def get_intersected(symbol, headers, dict, depth=1):
+def get_intersected(SCORE, symbol, headers, dict, depth=1):
 	return [{'root_symbol':symbol, 'cor_symbol':headers[i].strip(), 'score':score, 'depth':depth} for i,
 	score in enumerate(dict[symbol]) if score > SCORE and headers[i].strip()!=symbol]
 
@@ -83,6 +84,7 @@ def read_csv():
 			print('Run with only the dataset as argument to generate a list of the labels')
 			print('*****')
 			exit()
+
 	root_symbol = sys.argv[1]
 	transponse_flag = int(sys.argv[2])
 	file_name = sys.argv[3]
@@ -92,6 +94,7 @@ def read_csv():
 	#Read the dataset
 	headers = []
 	data = {}
+
 	delim=check_filetype(file_name)
 
 	with open(file_name) as file:
@@ -102,7 +105,7 @@ def read_csv():
 		for row in csv_reader:
 			temp=row[0].rstrip()
 			data[temp] = [float(x) for x in row[1:]]
-	return data, headers, root_symbol
+	return root_symbol, headers, data
 
 def check_filetype(filename):
 	delim= None
