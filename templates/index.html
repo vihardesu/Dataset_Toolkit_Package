@@ -1,0 +1,100 @@
+{% include 'front.html' %}
+
+<div class="row" style="margin:50px 0">
+        <div class="col-md-12">
+                <form action="{{ url_for('result') }}" method="post">
+                <input type="radio" name="script" value="cluster" checked> Cluster<br>
+                <input type="radio" name="script" value="graph"> Relationship Graph<br>
+                <select style="height:50px" class=form-control id=file_name name="file_name">
+                <option value="0"  selected style="display:none">Select a dataset</option>
+                </select>
+                <select style="height:50px" class="form-control" id="symbols" name="symbols">
+                <option value="0" selected style="display:none">Symbol</option>
+                </select>
+                <select style="height:50px" disabled class=form-control name="min_score">
+                        <option value="0.0001" selected style="display:none">Min Relationship Streng$
+                        <option value="0.5">0.5</option>
+                        <option value="0.2">0.2</option>
+                        <option value="0.1">0.1</option>
+                        <option value="0.05">0.05</option>
+                        <option value="0.02">0.02</option>
+                        <option value="0.01">0.01</option>
+                        <option value="0.001">0.001</option>
+                        <option value="0.0001">0.0001</option>
+                </select>
+                <select style="height:50px" disabled class=form-control name="depth">
+                        <option value="3"  selected style="display:none">Max Branch Depth</option>
+                        <option value="3">3</option>
+                        <option value="2">2</option>
+                        <option value="1">1</option>
+                </select>
+                <select style="height:50px" disabled class=form-control name="branches">
+                        <option value="0" selected style="display:none">Max Branches</option>
+                        {% for i in range(1, 11) %}
+                                <option value={{i}}>{{i}}</option>
+                        {% endfor %}
+                        <option value="0">Max</option>
+                </select>
+                <select style="height:50px" disabled class=form-control name="nodes">
+                        <option value="50" selected style="display:none">Max Nodes</option>
+                        {% for i in range(1, 51) %}
+                                <option value={{i}}>{{i}}</option>
+                        {% endfor %}
+                </select>
+                <input type="submit" name="submit" id="submit" disabled value="Visualize Dataset" st$
+                </form>
+        </div>
+</div>
+<script>
+"use strict";
+var datasets = {{dataset | tojson }};
+var form = $('form');
+var dataset= $('select#file_name');
+var symbol = $('select#symbols');
+$('form').each(function() {
+        this.reset();
+$(window).bind("pageshow", function() {
+
+        $('select[name="min_score"]').prop('disabled', true)
+        $('select[name="depth"]').prop('disabled', true)
+        $('select[name="branches"]').prop('disabled', true)
+        $('select[name="nodes"]').prop('disabled', true)
+        $('#submit').prop('disabled', true);
+
+        form[0].reset();
+        $("#symbols").find("option").remove().end().append('<option value="0" selected style="displa$
+        $('#file_name').one('change', function() {
+        $('#submit').prop('disabled', false);
+        });
+
+});
+
+
+for (var key in datasets) {
+        dataset.append($('<option/>', {'value': key, 'text': key}));
+}
+
+dataset.change(function(ev) {
+symbol.empty();
+symbol.append($('<option/>'));
+
+        var symbols = datasets[dataset.val()];
+        for (var i in symbols) {
+                symbol.append($('<option/>', {'value': symbols[i], 'text': symbols[i]}));
+        }
+        $("#symbols").find("option:first").remove();
+});
+
+$('input[name="script"]').on('change', function() {
+        $('select[name="min_score"]').prop('disabled', this.value != "graph")
+        $('select[name="depth"]').prop('disabled', this.value != "graph")
+        $('select[name="branches"]').prop('disabled', this.value != "graph")
+        $('select[name="nodes"]').prop('disabled', this.value != "graph")
+});
+
+
+</script>
+
+
+
+{% include 'back.html' %}
