@@ -1,0 +1,55 @@
+{% include 'front.html' %}
+                <h3>
+                Dataset Visualization Toolkit - Predicted Price Correlations Between Equities
+                </h3>
+                <h5>
+                Based on Known & Hidden Relationship Detection in Data using NLP/NLU (Natural Langua$
+                </h5>
+
+                <b>Sector:</b> Pharmaceuticals<br>
+                <b>Dataset:</b> <a href={{dl_link}}>{{file_name}}</a><br>
+        <b>Context-control:</b> {{symbol}}<br>
+        <b>Min Relationship Strength:</b> {{min_score}}<br>
+        <b>Branch Depth specified:</b> {{depth}}<br>
+        <b>Max Branch Depth found:</b> {{max_depth}}<br>
+        <b>Max Branches:</b> {{branches}}<br>
+        <b>Nodes Specified:</b> {{nodes}}<br>
+        <b>Nodes found:</b> {{found_nodes}}<br>
+        <b>Time to generate graph:</b> {{time}}s<br>
+        <br>
+
+
+
+{% include 'result/mid.html' %}
+<script>
+Highcharts.chart('container-2', {
+    chart: {
+        type: 'networkgraph',
+        height: '100%'
+    },
+    title: {
+        text: 'NLU Relationship Network - Predicted Price Correlations'
+    },
+    subtitle: {
+        text: 'Type: Graph, Symbol: {{symbol | safe}}, Min Relationship Strength: {{min_score}} Bran$
+    },
+    plotOptions: {
+        networkgraph: {
+            keys: ['from', 'to'],
+            layoutAlgorithm: {
+                enableSimulation: true
+            }
+        }
+    },
+    series: [{
+        dataLabels: {
+            enabled: true
+        },
+        data: {{result | safe}}
+    }]
+});
+
+</script>
+{% include 'back_button.html' %}
+{% include 'back.html' %}
+
